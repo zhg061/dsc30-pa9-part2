@@ -153,6 +153,24 @@ public class Graph {
     }
 
     /**
+     * Computes the euclidean distance between two points as described by their
+     * coordinates
+     *
+     * @param ux (double) x coordinate of point u
+     * @param uy (double) y coordinate of point u
+     * @param vx (double) x coordinate of point v
+     * @param vy (double) y coordinate of point v
+     * @return (double) distance between the two points
+     */
+    public double computeEuclideanDistance(double ux, double uy, double vx, double vy) {
+
+        // calculate the distance from u to v
+
+        return Math.pow((Math.pow((vx - ux), powerFactor) +
+                Math.pow((vy - uy), powerFactor)), powerFactor1);
+    }
+
+    /**
      * Calculates the euclidean distance for all edges in the graph and all edges in 
      * allUndirectedEdges. If edgesGiven is false, directly return at first.
      */
@@ -180,25 +198,22 @@ public class Graph {
      * is false. If edgesGiven is true, directly return at first.
      */
     public void populateAllEdges() {
-        boolean add = true;
+        // if edgesGiven is true return immediately
         if (edgesGiven)
             return;
-        // 1. initialize a list of undirected edges and go through all directed edges
-        for (Edge edge: getEdges()) {
-            // 2. before adding each directed edge to the list of undirected edges,
-            // check if an directed edge that is opposite of the current directed edge was already added
-            for (Edge e: allUndirectedEdges) {
-                // 3. to check if an opposite edge already exists,
-                // loop through all edges e in your list of undirected edges,
-                // and check if e's source is equal to the current edge's dest
-                // and if e's dest is equal to the current edge's source
-                if (e.getSource() == edge.getTarget() && e.getTarget() == edge.getSource())
-                    add = false;
-                if (e.getSource() == edge.getSource() && e.getTarget() == edge.getTarget())
-                    add = false;
+        // get the list of all vertexes
+        Collection<Vertex> vCollection = getVertices();
+        Vertex[] vertices = vCollection.toArray(new Vertex[vCollection.size()]);
+        // iterate through this nested loop to add edges to allUndirectedEdges
+        for (int i = 0; i < vertices.length - 1; i++) {
+            // with j = i + 1; vertices[j] would never be equal to vertices[i]
+            for (int j = i + 1; j < vertices.length; j++) {
+                Vertex v1= vertices[i];
+                Vertex v2 = vertices[j];
+                Edge e = new Edge(v1, v2,
+                        computeEuclideanDistance(v1.getX(), v1.getY(), v2.getX(), v2.getY()));
+                allUndirectedEdges.add(e);
             }
-            if (add)
-                allUndirectedEdges.add(edge);
         }
     }
 
@@ -221,8 +236,9 @@ public class Graph {
             Vertex root1 = ds.find(v1);
             Vertex root2 = ds.find(v2);
             // if v1 and v2 share the same parent, don't do anything, and iterate next
-            if (root1 == root2)
+            if (root1 == root2) {
                 continue;
+            }
             else {
                 // union v1 and v2
                 ds.union(v1, v2);
