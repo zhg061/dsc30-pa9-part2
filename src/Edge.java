@@ -1,4 +1,7 @@
-
+/*
+ * NAME: Zhaoyi Guo
+ * PID: A15180402
+ */
 public class Edge {
 
     private double distance; // the distance from source to target

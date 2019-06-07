@@ -1,3 +1,7 @@
+/*
+ * NAME: Zhaoyi Guo
+ * PID: A15180402
+ */
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -18,6 +22,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -137,7 +143,7 @@ public class Display extends JFrame {
         gbl_contentPane.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
         contentPane.setLayout(gbl_contentPane);
 
-        graph = readGraph("cityxy.txt", "citypairs.txt");
+        graph = readGraph("ucsdxy.txt", "ucsdpairs.txt");
 
         panel = new GraphPanel(graph);
         GridBagConstraints gbc_panel = new GridBagConstraints();
@@ -207,7 +213,7 @@ public class Display extends JFrame {
         contentPane.add(lblReloadGraph, gbc_lblReloadGraph);
 
         txtCityxytxt = new JTextField();
-        txtCityxytxt.setText("cityxy.txt");
+        txtCityxytxt.setText("ucsdxy.txt");
         GridBagConstraints gbc_txtCityxytxt = new GridBagConstraints();
         gbc_txtCityxytxt.gridwidth = 1;
         gbc_txtCityxytxt.insets = new Insets(0, 0, 5, 5);
@@ -218,7 +224,7 @@ public class Display extends JFrame {
         txtCityxytxt.setColumns(10);
 
         txtCitypairstxt = new JTextField();
-        txtCitypairstxt.setText("citypairs.txt");
+        txtCitypairstxt.setText("ucsdpairs.txt");
         GridBagConstraints gbc_txtCitypairstxt = new GridBagConstraints();
         gbc_txtCitypairstxt.gridwidth = 1;
         gbc_txtCitypairstxt.insets = new Insets(0, 0, 5, 5);
@@ -354,13 +360,24 @@ public class Display extends JFrame {
         }
 
         public void paintGraph(Graphics g) {
-            // TODO: for each edge in the graph, use paintEdge(g, edge.source, edge.target, edge.distance, Color.LIGHT_GRAY, DEFAULT_THICKNESS, 255); to print the edge.
-
+            // TODO: for each edge in the graph, use paintEdge(g, edge.source, edge.target,
+            //  edge.distance, Color.LIGHT_GRAY, DEFAULT_THICKNESS, 255); to print the edge.
+            ArrayList<Edge> collection = graph.getAllUndirectedEdges();
+            for (Edge edge: collection) {
+                paintEdge(g, edge.getSource(), edge.getTarget(), edge.getDistance(),
+                            Color.LIGHT_GRAY, DEFAULT_THICKNESS, 255);
+            }
             // TODO: for each vertex in the graph, use paintVertex(g, v); to print the vertex
+            ArrayList<Vertex> vertexes = graph.getVertexes();
+            for (Vertex v: vertexes) {
+                paintVertex(g, v);
+            }
 
             for (Edge edge : overlayEdges) {
                 paintEdge(g, edge.getSource(), edge.getTarget(), edge.getDistance(), Color.BLUE, 8, 50);
             }
+
+
 
         }
 
