@@ -13,8 +13,8 @@ public class Graph {
     private ArrayList<Edge> resultMST;
     private DisjointSet ds;
     private boolean edgesGiven;
-    static int powerFactor = 2;
-    static double powerFactor1 = 1.0/2.0;
+    private static final int POWERFFACTOR = 2;
+    private static final double POWERFFACTOR1 = 0.5;
     private HashMap<Vertex, List<Edge>> myEdgeList;
     private HashMap<String, Vertex> myVertex;
 
@@ -166,8 +166,8 @@ public class Graph {
 
         // calculate the distance from u to v
 
-        return Math.pow((Math.pow((vx - ux), powerFactor) +
-                Math.pow((vy - uy), powerFactor)), powerFactor1);
+        return Math.pow((Math.pow((vx - ux), POWERFFACTOR) +
+                Math.pow((vy - uy), POWERFFACTOR)), POWERFFACTOR1);
     }
 
     /**
@@ -181,11 +181,8 @@ public class Graph {
             return;
         // compute all the distances, and update it to the edges from myEdgeList
         for (Edge edge: allUndirectedEdges) {
-                double distance = Math.pow((Math.pow((edge.getSource().getX() -
-                        edge.getTarget().getX()), powerFactor) +
-                        Math.pow((edge.getSource().getY() -
-                                edge.getTarget().getY()),
-                                powerFactor)), powerFactor1);
+                double distance = computeEuclideanDistance(edge.getSource().getX(),
+                        edge.getSource().getY(), edge.getTarget().getX(), edge.getTarget().getY());
                 // set the distance
                 edge.setDistance(distance);
             }
